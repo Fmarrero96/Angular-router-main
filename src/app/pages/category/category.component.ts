@@ -6,7 +6,7 @@ import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-category',
-  templateUrl: './category.component.html',
+  template: `<app-products [products]="products" (onLoadMore)="loadMore()"></app-products>`, //en vez de templateURL, va TEMPLATE solo y se puede usar cuando tenga poca logica el html
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
