@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ProductsService } from 'src/app/services/products.service';
+import { Product } from 'src/app/models/product.model';
 
 @Component({
   selector: 'app-category',
@@ -7,9 +10,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CategoryComponent implements OnInit {
 
-  constructor() { }
+  categoryId: string |null = null;
+
+  constructor(
+    private router:ActivatedRoute,
+    private productsService: ProductsService
+  ) { }
+
+  products: Product[] = [];
+  limit = 10;
+  offset = 0;
 
   ngOnInit(): void {
+    this.router.paramMap.subscribe(params => {
+      this.categoryId = params.get('id'); //debe coicidir con el nombre que hay en el app-routing
+      if (this.categoryId){
+        this.productsService.getByCategory(this.categoryId, this.limit, this.offset).subscribe(
+          data => {
+            this.products = data;
+          }
+        )
+      }
+    })
+  }
+
+
+  loadMore(): void {
+    this.productsService.getAll(this.limit, this.offset)
+      .subscribe(data => {
+        this.products = this.products.concat(data.filter(product => product.images.length > 0));
+        this.offset += this.limit;
+      });
   }
 
 }
