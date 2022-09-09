@@ -21,6 +21,7 @@ export class CategoryComponent implements OnInit {
   products: Product[] = [];
   limit = 10;
   offset = 0;
+  productId: string | null = null;
 
   ngOnInit(): void {
     this.router.paramMap.pipe(
@@ -31,10 +32,12 @@ export class CategoryComponent implements OnInit {
         }
         return []
       })
+      
     )
     .subscribe((data) => {
       this.products = data;
     });
+    this.router.queryParamMap.subscribe(params => {this.productId = params.get('product')});
   }
 
 
