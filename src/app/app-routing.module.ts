@@ -36,6 +36,10 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'cms',
+    loadChildren: () => import('./cms/cms.module').then(m => m.CmsModule)
+  },
+  {
     path: '**', //cuando no encuentra que exista el path te manda por defecto con **
     component: NotFoundComponent
   },
