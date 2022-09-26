@@ -6,6 +6,7 @@ import { AuthService } from './../../../services/auth.service';
 import { User } from './../../../models/user.model';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { Category } from 'src/app/models/category.model';
+import { useAnimation } from '@angular/animations';
 
 @Component({
   selector: 'app-nav',
@@ -31,6 +32,9 @@ export class NavComponent implements OnInit {
       this.counter = products.length;
     });
     this.getAllCategories();
+    this.authService.user$.subscribe(data =>{
+      this.profile = data;
+    })
   }
 
   toggleMenu() {
@@ -40,7 +44,7 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.loginAndGet('john@mail.com', 'changeme')
     .subscribe(user => {
-      this.profile = user;
+      this.router.navigate(['/profile'])
     });
   }
 

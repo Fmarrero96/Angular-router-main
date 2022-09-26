@@ -1,19 +1,23 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 
 import { UsersService } from './services/users.service';
 import { FilesService } from './services/files.service';
+import { AuthService } from './services/auth.service';
+import { TokenService } from './services/token.service';
 
 @Component({
   selector: 'app-root',
   template: `<router-outlet></router-outlet>`,
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   imgRta = '';
 
   constructor(
     private usersService: UsersService,
-    private filesService: FilesService
+    private filesService: FilesService,
+    private authService:AuthService,
+    private tokenService:TokenService
   ) {}
 
   createUser() {
@@ -31,6 +35,14 @@ export class AppComponent {
   downloadPdf() {
     this.filesService.getFile('my.pdf', 'https://young-sands-07814.herokuapp.com/api/files/dummy.pdf', 'application/pdf')
     .subscribe()
+  }
+
+  ngOnInit(){
+    const token = this.tokenService.getToken();
+    if (token){
+      this.authService.getProfile().subscribe()
+    }
+    
   }
 
   onUpload(event: Event) {
